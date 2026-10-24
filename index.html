@@ -1,0 +1,1682 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClearDoc - Explain Confusing Letters, Bills & Medical Notes in Plain Words</title>
+    <meta name="description" content="ClearDoc takes confusing official letters, utility bills, government notices, doctor prescriptions, or photos and explains them in plain everyday words across 8 languages using Gemma 4." />
+    <meta property="og:title" content="ClearDoc - Plain Language Document Explainer" />
+    <meta property="og:description" content="Understand urgent bills, clinic discharge notes, and official letters from text or photos in simple, everyday words with Gemma 4." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+        --color-primary: #0284c7;
+        --color-primary-dark: #0369a1;
+        --color-primary-light: #e0f2fe;
+        --color-bg: #f8fafc;
+        --color-card: #ffffff;
+        --color-border: #e2e8f0;
+        --color-text-main: #0f172a;
+        --color-text-muted: #475569;
+        --color-amber: #d97706;
+        --color-amber-bg: #fef3c7;
+        --color-rose: #e11d48;
+        --color-rose-bg: #ffe4e6;
+        --color-emerald: #059669;
+        --color-emerald-bg: #d1fae5;
+        --color-indigo: #4f46e5;
+        --color-indigo-bg: #e0e7ff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--color-bg);
+        color: var(--color-text-main);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Top Navigation / Header */
+      header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #0284c7 0%, #3b82f6 100%);
+        color: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 800;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+      }
+
+      .brand-info h1 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+        line-height: 1.2;
+      }
+
+      .brand-info p {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+        font-weight: 500;
+      }
+
+      .header-badges {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .badge-gemma {
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+      }
+
+      .badge-security {
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+      }
+
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #0284c7;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+      }
+
+      /* Main container */
+      main {
+        max-width: 1100px;
+        width: 100%;
+        margin: 1.5rem auto;
+        padding: 0 1.25rem 3rem;
+        flex: 1;
+      }
+
+      /* Hero section */
+      .hero {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .hero h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        color: var(--color-text-muted);
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      /* App Grid */
+      .app-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+      }
+
+      @media (min-width: 900px) {
+        .app-layout.has-results {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* Card Styling */
+      .card {
+        background: var(--color-card);
+        border: 1px solid var(--color-border);
+        border-radius: 18px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .card.drag-over {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2);
+        background: #f0f9ff;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Document Form Controls */
+      .toolbar-chips {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+
+      .chip-btn {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.4rem 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: all 0.15s ease;
+      }
+
+      .chip-btn:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+
+      .chip-btn-photo {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #047857;
+      }
+
+      .chip-btn-photo:hover {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      /* Photo Upload Dropzone */
+      .photo-upload-box {
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        background: #f8fafc;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .photo-upload-box:hover {
+        border-color: #0284c7;
+        background: #f0f9ff;
+      }
+
+      .photo-upload-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .photo-upload-text {
+        font-size: 0.88rem;
+        color: #334155;
+        font-weight: 600;
+      }
+
+      .photo-upload-hint {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+
+      /* Attached Image Preview Card */
+      .image-preview-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #f0fdf4;
+        border: 1.5px solid #86efac;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        animation: fadeIn 0.25s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .image-preview-thumb {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #bbf7d0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .image-preview-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .image-preview-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #166534;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 2px;
+      }
+
+      .image-preview-details {
+        font-size: 0.75rem;
+        color: #4ade80;
+        color: #15803d;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .btn-remove-photo {
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        color: #991b1b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-remove-photo:hover {
+        background: #fecaca;
+        color: #7f1d1d;
+      }
+
+      .textarea-wrapper {
+        position: relative;
+        margin-bottom: 1rem;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        font-family: inherit;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #1e293b;
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        resize: vertical;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+      }
+
+      .char-count {
+        position: absolute;
+        bottom: 10px;
+        right: 14px;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        font-family: var(--font-mono);
+        background: rgba(255, 255, 255, 0.85);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      /* Control Bar (Language + Submit) */
+      .control-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      @media (min-width: 550px) {
+        .control-bar {
+          flex-direction: row;
+          align-items: flex-end;
+        }
+      }
+
+      .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #475569;
+      }
+
+      select {
+        height: 48px;
+        padding: 0 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #0f172a;
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      }
+
+      .btn-primary {
+        height: 48px;
+        padding: 0 1.5rem;
+        background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+        white-space: nowrap;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      }
+
+      .btn-primary:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* Results Container */
+      .results-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .results-header-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: #f8fafc;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+      }
+
+      .actions-group {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-tool {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: all 0.15s ease;
+      }
+
+      .btn-tool:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+        border-color: #94a3b8;
+      }
+
+      /* The 5 Output Section Cards */
+      .section-card {
+        border-radius: 16px;
+        border: 1.5px solid var(--color-border);
+        background: #ffffff;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .section-card:hover {
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+      }
+
+      .section-banner {
+        padding: 0.85rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: -0.01em;
+      }
+
+      .section-banner-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .section-body {
+        padding: 1.25rem;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #1e293b;
+      }
+
+      .section-body p {
+        margin-bottom: 0.75rem;
+      }
+
+      .section-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-body ul, .section-body ol {
+        padding-left: 1.35rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .section-body li {
+        margin-bottom: 0.45rem;
+      }
+
+      /* Color-Coded Themes for the 5 Sections */
+      /* 1. What It Says - Slate/Blue */
+      .theme-summary .section-banner {
+        background: #f0f9ff;
+        color: #0369a1;
+        border-bottom: 1.5px solid #bae6fd;
+      }
+
+      /* 2. What You Need To Do - Emerald */
+      .theme-action .section-banner {
+        background: #ecfdf5;
+        color: #047857;
+        border-bottom: 1.5px solid #a7f3d0;
+      }
+
+      /* 3. Deadlines, Amounts, Dosages - Amber */
+      .theme-critical .section-banner {
+        background: #fffbeb;
+        color: #b45309;
+        border-bottom: 1.5px solid #fde68a;
+      }
+      .theme-critical .section-body {
+        background: #fffdfa;
+      }
+
+      /* 4. What To Watch Out For - Rose/Warning */
+      .theme-warning .section-banner {
+        background: #fff1f2;
+        color: #be123c;
+        border-bottom: 1.5px solid #fecdd3;
+      }
+      .theme-warning .section-body {
+        background: #fffbfb;
+      }
+
+      /* 5. Questions To Ask - Indigo/Purple */
+      .theme-questions .section-banner {
+        background: #f5f3ff;
+        color: #6d28d9;
+        border-bottom: 1.5px solid #ddd6fe;
+      }
+
+      /* Highlight tags */
+      .highlight-amount {
+        background: #dcfce7;
+        color: #15803d;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .highlight-date {
+        background: #fef3c7;
+        color: #b45309;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .highlight-med {
+        background: #e0e7ff;
+        color: #4338ca;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      /* Loading State */
+      .loading-box {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        background: white;
+        border-radius: 18px;
+        border: 1px solid var(--color-border);
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #e0f2fe;
+        border-top-color: #0284c7;
+        border-radius: 50%;
+        margin: 0 auto 1.25rem;
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .loading-box h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.35rem;
+      }
+
+      .loading-box p {
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+
+      /* Error Alert */
+      .alert-error {
+        background: #fff1f2;
+        border: 1.5px solid #fecdd3;
+        color: #9f1239;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+
+      /* RTL Support for Arabic */
+      .rtl {
+        direction: rtl;
+        text-align: right;
+      }
+
+      .rtl .section-banner-title {
+        flex-direction: row-reverse;
+      }
+
+      .rtl .section-body ul, .rtl .section-body ol {
+        padding-right: 1.35rem;
+        padding-left: 0;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        font-size: 0.85rem;
+        color: #64748b;
+        border-top: 1px solid var(--color-border);
+        background: #ffffff;
+        margin-top: auto;
+      }
+
+      /* Print Styles */
+      @media print {
+        header, .hero, .input-card, footer, .results-header-actions, .toolbar-chips, .photo-upload-box, .image-preview-card {
+          display: none !important;
+        }
+        body {
+          background: white;
+          color: black;
+        }
+        .section-card {
+          border: 1px solid #ccc;
+          page-break-inside: avoid;
+          margin-bottom: 1.5rem;
+        }
+        .section-banner {
+          background: #f0f0f0 !important;
+          color: black !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="header-container">
+        <a href="/" class="brand">
+          <div class="brand-icon">✓</div>
+          <div class="brand-info">
+            <h1>ClearDoc</h1>
+            <p>Plain-language explainer for confusing letters, bills & medical notes</p>
+          </div>
+        </a>
+
+        <div class="header-badges">
+          <span class="badge badge-gemma">
+            <span class="dot"></span>
+            <span id="badge-model">Gemma 4 (Google AI Studio)</span>
+          </span>
+          <span class="badge badge-security">🔒 Server-side key protection</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Intro -->
+      <section class="hero">
+        <h2>Don't let confusing official paperwork stress you out.</h2>
+        <p>Paste text <strong>or snap a photo</strong> of any hard-to-read utility bill, clinic discharge note, doctor's prescription, or government notice. ClearDoc explains what it means in plain everyday words across 8 languages.</p>
+      </section>
+
+      <!-- Error Notification Area -->
+      <div id="error-alert" class="alert-error" style="display: none;">
+        <span style="font-size: 1.3rem;">⚠️</span>
+        <div style="flex: 1;">
+          <strong>Something went wrong:</strong>
+          <span id="error-message"></span>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="app-layout" id="app-layout">
+        <!-- Input Card -->
+        <div class="card input-card" id="input-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span>📄</span> Paste Text or Upload a Photo
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">
+              Photos, bills, prescriptions, letters
+            </div>
+          </div>
+
+          <!-- Quick Samples / Preset Chips -->
+          <div class="toolbar-chips">
+            <button type="button" class="chip-btn" id="btn-load-sample" title="Load realistic clinic discharge statement with $184.50 bill and Amoxicillin">
+              🏥 Load Clinic Discharge ($184.50 & Amoxicillin)
+            </button>
+            <button type="button" class="chip-btn chip-btn-photo" id="btn-sample-photo" title="Generate and attach a sample picture of a clinic bill to test photo recognition">
+              📸 Test with Sample Bill Photo
+            </button>
+            <button type="button" class="chip-btn" id="btn-water-sample" title="Load municipal utility notice">
+              💧 Water Shut-Off
+            </button>
+            <button type="button" class="chip-btn" id="btn-clear" title="Clear document box and attached photo">
+              🗑️ Clear
+            </button>
+          </div>
+
+          <!-- Hidden File Input for Image Upload / Camera Capture -->
+          <input type="file" id="file-input" accept="image/*" capture="environment" style="display: none;">
+
+          <!-- Photo Upload Dropzone / Button -->
+          <div class="photo-upload-box" id="drop-zone" title="Click or drag and drop a photo here, or paste with Ctrl+V">
+            <div class="photo-upload-content">
+              <span style="font-size: 1.6rem;">📷</span>
+              <div style="text-align: left;">
+                <div class="photo-upload-text">Upload or Take a Photo of Your Document</div>
+                <div class="photo-upload-hint">Supports photos from your phone camera, JPG, PNG, or paste directly with Ctrl+V</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attached Photo Preview Banner -->
+          <div class="image-preview-card" id="image-preview-card" style="display: none;">
+            <img id="image-preview-thumb" class="image-preview-thumb" alt="Document preview">
+            <div class="image-preview-info">
+              <div class="image-preview-title">
+                <span>✅</span>
+                <span id="image-preview-name">Photo attached</span>
+              </div>
+              <div class="image-preview-details" id="image-preview-size">
+                Gemma 4 will read all text and numbers directly from this photo.
+              </div>
+            </div>
+            <button type="button" class="btn-remove-photo" id="btn-remove-photo" title="Remove attached photo">
+              ✕ Remove
+            </button>
+          </div>
+
+          <!-- Optional Notes / Text Box -->
+          <div class="textarea-wrapper">
+            <textarea
+              id="doc-input"
+              placeholder="Paste document text here, or attach a photo above. (You can also type extra notes or questions for the AI here)...
+
+Example:
+ST. JUDE COMMUNITY HEALTH CLINIC
+Patient Responsibility: $184.50
+Prescription: Amoxicillin 500mg capsules
+Payment Deadline: November 3"
+              spellcheck="false"
+            ></textarea>
+            <span class="char-count" id="char-count">0 characters</span>
+          </div>
+
+          <!-- Control Bar (Language + Submit) -->
+          <div class="control-bar">
+            <div class="form-group">
+              <label for="language-select">Choose Language</label>
+              <select id="language-select">
+                <option value="English" selected>English (English)</option>
+                <option value="Hausa">Hausa (Harshen Hausa)</option>
+                <option value="French">French (Français)</option>
+                <option value="Spanish">Spanish (Español)</option>
+                <option value="Arabic">Arabic (العربية)</option>
+                <option value="Portuguese">Portuguese (Português)</option>
+                <option value="Swahili">Swahili (Kiswahili)</option>
+                <option value="Hindi">Hindi (हिन्दी)</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn-primary" id="btn-submit">
+              <span>✨</span>
+              <span id="btn-submit-label">Explain in Plain Words</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Output / Results Container -->
+        <div id="output-area" style="display: none;">
+          <!-- Loading State -->
+          <div class="loading-box" id="loading-state" style="display: none;">
+            <div class="spinner"></div>
+            <h3>Gemma 4 is reading your document...</h3>
+            <p id="loading-subtext">Translating medical and financial jargon into simple, everyday steps.</p>
+          </div>
+
+          <!-- Parsed 5-Section Results -->
+          <div class="results-container" id="results-display" style="display: none;">
+            <!-- Header Actions -->
+            <div class="results-header-actions">
+              <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a; display: flex; align-items: center; gap: 0.4rem;">
+                <span>✨</span>
+                <span>Plain Language Guide</span>
+                <span id="target-lang-badge" style="font-size: 0.75rem; background: #e2e8f0; padding: 2px 8px; border-radius: 999px; font-weight: 600;">English</span>
+              </div>
+              <div class="actions-group">
+                <button type="button" class="btn-tool" id="btn-read-aloud" title="Listen to summary using text-to-speech">
+                  🔊 Read Aloud
+                </button>
+                <button type="button" class="btn-tool" id="btn-copy" title="Copy full explanation">
+                  📋 Copy
+                </button>
+                <button type="button" class="btn-tool" id="btn-print" title="Print or save as PDF">
+                  🖨️ Print / PDF
+                </button>
+              </div>
+            </div>
+
+            <!-- 1. WHAT IT SAYS -->
+            <div class="section-card theme-summary">
+              <div class="section-banner">
+                <div class="section-banner-title">
+                  <span>📋</span>
+                  <span>1. WHAT IT SAYS</span>
+                </div>
+                <span style="font-size: 0.75rem; opacity: 0.85;">Summary</span>
+              </div>
+              <div class="section-body" id="sec-what-it-says"></div>
+            </div>
+
+            <!-- 2. WHAT YOU NEED TO DO -->
+            <div class="section-card theme-action">
+              <div class="section-banner">
+                <div class="section-banner-title">
+                  <span>✅</span>
+                  <span>2. WHAT YOU NEED TO DO</span>
+                </div>
+                <span style="font-size: 0.75rem; opacity: 0.85;">Action Checklist</span>
+              </div>
+              <div class="section-body" id="sec-what-you-need-to-do"></div>
+            </div>
+
+            <!-- 3. DEADLINES, AMOUNTS, AND DOSAGES -->
+            <div class="section-card theme-critical">
+              <div class="section-banner">
+                <div class="section-banner-title">
+                  <span>⏰</span>
+                  <span>3. DEADLINES, AMOUNTS, AND DOSAGES</span>
+                </div>
+                <span style="font-size: 0.75rem; opacity: 0.85;">Crucial Numbers</span>
+              </div>
+              <div class="section-body" id="sec-deadlines"></div>
+            </div>
+
+            <!-- 4. WHAT TO WATCH OUT FOR -->
+            <div class="section-card theme-warning">
+              <div class="section-banner">
+                <div class="section-banner-title">
+                  <span>⚠️</span>
+                  <span>4. WHAT TO WATCH OUT FOR</span>
+                </div>
+                <span style="font-size: 0.75rem; opacity: 0.85;">Warnings & Penalties</span>
+              </div>
+              <div class="section-body" id="sec-warnings"></div>
+            </div>
+
+            <!-- 5. QUESTIONS TO ASK -->
+            <div class="section-card theme-questions">
+              <div class="section-banner">
+                <div class="section-banner-title">
+                  <span>💬</span>
+                  <span>5. QUESTIONS TO ASK</span>
+                </div>
+                <span style="font-size: 0.75rem; opacity: 0.85;">Conversation Starters</span>
+              </div>
+              <div class="section-body" id="sec-questions"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        <strong>ClearDoc</strong> — Designed for patients, families, and everyday people. Powered by <strong>Gemma 4</strong> via Google AI Studio &amp; Ollama.
+      </p>
+      <p style="margin-top: 0.35rem; font-size: 0.78rem; color: #94a3b8;">
+        Disclaimer: ClearDoc translates confusing text into simple language. It does not replace professional medical or legal advice.
+      </p>
+    </footer>
+
+    <script>
+      // DOM Elements
+      const docInput = document.getElementById('doc-input');
+      const charCount = document.getElementById('char-count');
+      const languageSelect = document.getElementById('language-select');
+      const btnSubmit = document.getElementById('btn-submit');
+      const btnSubmitLabel = document.getElementById('btn-submit-label');
+      const btnLoadSample = document.getElementById('btn-load-sample');
+      const btnSamplePhoto = document.getElementById('btn-sample-photo');
+      const btnWaterSample = document.getElementById('btn-water-sample');
+      const btnClear = document.getElementById('btn-clear');
+      const fileInput = document.getElementById('file-input');
+      const dropZone = document.getElementById('drop-zone');
+      const inputCard = document.getElementById('input-card');
+      const imagePreviewCard = document.getElementById('image-preview-card');
+      const imagePreviewThumb = document.getElementById('image-preview-thumb');
+      const imagePreviewName = document.getElementById('image-preview-name');
+      const imagePreviewDetails = document.getElementById('image-preview-size');
+      const btnRemovePhoto = document.getElementById('btn-remove-photo');
+
+      const outputArea = document.getElementById('output-area');
+      const loadingState = document.getElementById('loading-state');
+      const resultsDisplay = document.getElementById('results-display');
+      const appLayout = document.getElementById('app-layout');
+      const errorAlert = document.getElementById('error-alert');
+      const errorMessage = document.getElementById('error-message');
+      const badgeModel = document.getElementById('badge-model');
+      const targetLangBadge = document.getElementById('target-lang-badge');
+
+      // Section Containers
+      const secWhatItSays = document.getElementById('sec-what-it-says');
+      const secWhatYouNeedToDo = document.getElementById('sec-what-you-need-to-do');
+      const secDeadlines = document.getElementById('sec-deadlines');
+      const secWarnings = document.getElementById('sec-warnings');
+      const secQuestions = document.getElementById('sec-questions');
+
+      // Actions
+      const btnReadAloud = document.getElementById('btn-read-aloud');
+      const btnCopy = document.getElementById('btn-copy');
+      const btnPrint = document.getElementById('btn-print');
+
+      let currentExplanationRaw = '';
+      let isReading = false;
+      let attachedImage = null; // { data: base64, mimeType: string, name: string }
+
+      // Character counter
+      docInput.addEventListener('input', () => {
+        const len = docInput.value.length;
+        charCount.textContent = `${len.toLocaleString()} character${len === 1 ? '' : 's'}`;
+        updateSubmitButtonLabel();
+      });
+
+      function updateSubmitButtonLabel() {
+        if (attachedImage && !docInput.value.trim()) {
+          btnSubmitLabel.textContent = 'Explain Photo in Plain Words';
+        } else if (attachedImage && docInput.value.trim()) {
+          btnSubmitLabel.textContent = 'Explain Photo & Notes';
+        } else {
+          btnSubmitLabel.textContent = 'Explain in Plain Words';
+        }
+      }
+
+      // Fetch configuration to show active model badge
+      async function fetchConfig() {
+        try {
+          const res = await fetch('/api/config');
+          if (res.ok) {
+            const data = await res.json();
+            const providerName = data.provider === 'local' ? 'Local Ollama' : 'Google AI Studio';
+            badgeModel.textContent = `Gemma 4 (${providerName}: ${data.model})`;
+          }
+        } catch {
+          // Keep default badge
+        }
+      }
+      fetchConfig();
+
+      // Trigger file selector on dropzone click
+      dropZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          processImageFile(file);
+        }
+        fileInput.value = ''; // Reset so the same file can be selected again
+      });
+
+      // Drag and Drop support
+      ['dragenter', 'dragover'].forEach((eventName) => {
+        inputCard.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          inputCard.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach((eventName) => {
+        inputCard.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          inputCard.classList.remove('drag-over');
+        });
+      });
+
+      inputCard.addEventListener('drop', (e) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (file && file.type.startsWith('image/')) {
+          processImageFile(file);
+        }
+      });
+
+      // Clipboard Paste support (Ctrl+V / Cmd+V)
+      window.addEventListener('paste', (e) => {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+        for (let item of items) {
+          if (item.type.startsWith('image/')) {
+            const blob = item.getAsFile();
+            if (blob) {
+              processImageFile(blob, 'Pasted screenshot.png');
+              break;
+            }
+          }
+        }
+      });
+
+      // Process and optimize image with in-memory canvas
+      function processImageFile(file, customName) {
+        hideError();
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            // Downscale to max 1600px width/height to ensure crisp text & rapid AI response
+            const maxDim = 1600;
+            let width = img.width;
+            let height = img.height;
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const mimeType = 'image/jpeg';
+            const optimizedBase64 = canvas.toDataURL(mimeType, 0.88);
+
+            const fileName = customName || file.name || 'document-photo.jpg';
+            const approxSizeKb = Math.round((optimizedBase64.length * 3) / 4 / 1024);
+
+            attachedImage = {
+              data: optimizedBase64,
+              mimeType,
+              name: fileName,
+            };
+
+            // Display preview
+            imagePreviewThumb.src = optimizedBase64;
+            imagePreviewName.textContent = fileName;
+            imagePreviewDetails.textContent = `Optimized photo (${width}×${height}px, ~${approxSizeKb} KB). Gemma 4 will read all text & numbers.`;
+            imagePreviewCard.style.display = 'flex';
+            updateSubmitButtonLabel();
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Remove photo
+      btnRemovePhoto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        attachedImage = null;
+        imagePreviewCard.style.display = 'none';
+        imagePreviewThumb.src = '';
+        updateSubmitButtonLabel();
+      });
+
+      // Generate a realistic sample photo of a clinic bill using HTML5 Canvas
+      btnSamplePhoto.addEventListener('click', () => {
+        hideError();
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 1500;
+        const ctx = canvas.getContext('2d');
+
+        // Document background with subtle paper texture
+        ctx.fillStyle = '#fdfdfb';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Border shadow outline
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(20, 20, 1160, 1460);
+
+        // Header Banner
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 36px sans-serif';
+        ctx.fillText('ST. JUDE REGIONAL COMMUNITY HEALTH CLINIC', 60, 90);
+
+        ctx.fillStyle = '#475569';
+        ctx.font = '22px sans-serif';
+        ctx.fillText('DEPARTMENT OF GENERAL MEDICINE & PATIENT STATEMENT', 60, 130);
+        ctx.fillText('1044 Mercer Street, Suite 300 | Phone: (555) 019-4820', 60, 165);
+
+        // Divider
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(60, 190);
+        ctx.lineTo(1140, 190);
+        ctx.stroke();
+
+        // Patient details
+        ctx.fillStyle = '#1e293b';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('STATEMENT OF ACCOUNT & CLINICAL DISCHARGE', 60, 240);
+
+        ctx.font = '20px sans-serif';
+        ctx.fillStyle = '#334155';
+        ctx.fillText('Patient Name: Jane M. Doe            DOB: 04/12/1984', 60, 280);
+        ctx.fillText('Attending Physician: Dr. Marcus Vance, MD    Account: ACC-94820', 60, 315);
+        ctx.fillText('Date of Service: October 22, 2026', 60, 350);
+
+        // Clinical Diagnosis Box
+        ctx.fillStyle = '#f0f9ff';
+        ctx.fillRect(60, 390, 1080, 160);
+        ctx.strokeStyle = '#bae6fd';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(60, 390, 1080, 160);
+
+        ctx.fillStyle = '#0369a1';
+        ctx.font = 'bold 22px sans-serif';
+        ctx.fillText('CLINICAL IMPRESSION & ORDERS', 80, 430);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '20px sans-serif';
+        ctx.fillText('Diagnosis: Acute bacterial rhinosinusitis with Eustachian dysfunction (ICD-10: J01.00).', 80, 470);
+        ctx.fillStyle = '#1d4ed8';
+        ctx.font = 'bold 22px sans-serif';
+        ctx.fillText('Rx: Amoxicillin 500mg oral capsules — Take 1 cap orally every 8 hours for 10 days.', 80, 515);
+
+        // Billing Table Header
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('FINANCIAL CHARGES & INSURANCE BREAKDOWN', 60, 610);
+
+        ctx.fillStyle = '#f1f5f9';
+        ctx.fillRect(60, 630, 1080, 45);
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText('DESCRIPTION', 80, 660);
+        ctx.fillText('GROSS', 650, 660);
+        ctx.fillText('INSURANCE', 830, 660);
+        ctx.fillText('YOUR SHARE', 1000, 660);
+
+        // Rows
+        ctx.font = '19px sans-serif';
+        ctx.fillStyle = '#1e293b';
+        ctx.fillText('Level 4 Outpatient Diagnostic Evaluation', 80, 715);
+        ctx.fillText('$265.00', 650, 715);
+        ctx.fillText('-$122.50', 830, 715);
+        ctx.fillText('$142.50', 1000, 715);
+
+        ctx.fillText('Point-of-Care Bacterial Culture Screen', 80, 765);
+        ctx.fillText('$42.00', 650, 765);
+        ctx.fillText('-$55.00', 830, 765);
+        ctx.fillText('$0.00', 1000, 765);
+
+        ctx.fillText('Diagnostic Facility Surcharge', 80, 815);
+        ctx.fillText('$55.00', 650, 815);
+        ctx.fillText('$0.00', 830, 815);
+        ctx.fillText('$42.00', 1000, 815);
+
+        // Subtotal separator
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.beginPath();
+        ctx.moveTo(60, 850);
+        ctx.lineTo(1140, 850);
+        ctx.stroke();
+
+        // Big Total Callout
+        ctx.fillStyle = '#fef3c7';
+        ctx.fillRect(60, 880, 1080, 120);
+        ctx.strokeStyle = '#fde68a';
+        ctx.strokeRect(60, 880, 1080, 120);
+
+        ctx.fillStyle = '#92400e';
+        ctx.font = 'bold 28px sans-serif';
+        ctx.fillText('TOTAL PATIENT RESPONSIBILITY BALANCE: $184.50', 80, 935);
+        ctx.fillStyle = '#b45309';
+        ctx.font = 'bold 22px sans-serif';
+        ctx.fillText('PAYMENT DEADLINE: NOVEMBER 3, 2026', 80, 975);
+
+        // Warning Notice
+        ctx.fillStyle = '#fff1f2';
+        ctx.fillRect(60, 1030, 1080, 130);
+        ctx.strokeStyle = '#fecdd3';
+        ctx.strokeRect(60, 1030, 1080, 130);
+
+        ctx.fillStyle = '#9f1239';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText('IMPORTANT NOTICE & WARNINGS:', 80, 1065);
+        ctx.font = '18px sans-serif';
+        ctx.fillText('• Accounts unpaid after November 3 are subject to a 5% monthly penalty and collection escalation.', 80, 1100);
+        ctx.fillText('• Seek immediate ER care if you experience allergic swelling, dyspnea, or rash from Amoxicillin.', 80, 1130);
+
+        // Official Stamp Simulation
+        ctx.save();
+        ctx.translate(950, 1320);
+        ctx.rotate(-0.15);
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-120, -40, 240, 80);
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('PAYMENT DUE', 0, -5);
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText('NOV 3', 0, 25);
+        ctx.restore();
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        attachedImage = {
+          data: dataUrl,
+          mimeType: 'image/jpeg',
+          name: 'Clinic-Discharge-Bill-Photo.jpg',
+        };
+
+        imagePreviewThumb.src = dataUrl;
+        imagePreviewName.textContent = 'Clinic-Discharge-Bill-Photo.jpg';
+        imagePreviewDetails.textContent = 'Sample clinic bill photo ($184.50, Nov 3, Amoxicillin). Gemma 4 will inspect it.';
+        imagePreviewCard.style.display = 'flex';
+        updateSubmitButtonLabel();
+      });
+
+      // Load Clinic Discharge Sample Text
+      btnLoadSample.addEventListener('click', async () => {
+        hideError();
+        try {
+          const res = await fetch('/api/sample');
+          if (res.ok) {
+            const data = await res.json();
+            docInput.value = data.text;
+            docInput.dispatchEvent(new Event('input'));
+            docInput.focus();
+          } else {
+            loadEmbeddedClinicSample();
+          }
+        } catch {
+          loadEmbeddedClinicSample();
+        }
+      });
+
+      function loadEmbeddedClinicSample() {
+        docInput.value = `ST. JUDE COMMUNITY HEALTH CLINIC
+DEPARTMENT OF AMBULATORY MEDICINE & PATIENT FINANCIAL SERVICES
+Patient Statement & Clinical Discharge Summary
+
+Date of Service: October 22, 2026
+Patient: Jane M. Doe
+Attending Physician: Dr. Marcus Vance, MD
+
+DIAGNOSIS:
+Acute bacterial rhinosinusitis with secondary Eustachian tube dysfunction (ICD-10: J01.00).
+
+PRESCRIPTION ORDERS:
+- Medication: Amoxicillin 500mg oral capsules.
+  Dispense: 30 capsules. Sig: Take 1 capsule orally every 8 hours with meals for 10 days.
+  Adherence Note: Complete the entirety of antibacterial therapy.
+
+FINANCIAL SUMMARY:
+- Gross Charges: $362.00
+- Insurance Adjustments: -$177.50
+- Patient Co-Insurance Liability: $184.50
+
+PAYMENT DEADLINE:
+The outstanding patient balance of $184.50 is payable in full no later than November 3.
+Accounts unpaid after November 3 are subject to late fees and collection referral.
+
+WARNING SIGNS:
+Seek immediate emergency medical care if you experience anaphylactic reactions (urticaria/rash, dyspnea, facial swelling) to Amoxicillin.`;
+        docInput.dispatchEvent(new Event('input'));
+        docInput.focus();
+      }
+
+      // Load Water Bill Sample Text
+      btnWaterSample.addEventListener('click', () => {
+        hideError();
+        docInput.value = `DEPARTMENT OF WATER MANAGEMENT & ENVIRONMENTAL SERVICES
+FINAL NOTICE OF DISCONNECTION OF SERVICE
+
+Account No: WTR-49102-99
+Service Address: 412 Elmwood Avenue, Apt 2B
+Notice Issue Date: October 24, 2026
+
+URGENT NOTICE CONCERNING DELINQUENT CHARGES:
+Your municipal potable water utility balance currently reflects an accrued past-due arrears sum of $142.15. Despite prior billing cycles, your account remains unsatisfied.
+
+DISCONNECTION SCHEDULE:
+Physical termination of water service to the above-referenced premises is scheduled for execution on November 12 unless total delinquent remittance is posted. A $75.00 administrative restoration surcharge plus a $50.00 technician dispatch fee will be assessed to reactivate meters.
+
+HEARING & HARDSHIP RELIEF:
+Customers facing certified financial hardship may request a utility mediation conference or deferral payment arrangement by contacting the municipal bureau prior to November 5.`;
+        docInput.dispatchEvent(new Event('input'));
+        docInput.focus();
+      });
+
+      // Clear button
+      btnClear.addEventListener('click', () => {
+        docInput.value = '';
+        docInput.dispatchEvent(new Event('input'));
+        attachedImage = null;
+        imagePreviewCard.style.display = 'none';
+        imagePreviewThumb.src = '';
+        hideError();
+        updateSubmitButtonLabel();
+        docInput.focus();
+      });
+
+      // Show / Hide Error
+      function showError(msg) {
+        errorMessage.textContent = msg;
+        errorAlert.style.display = 'flex';
+        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      function hideError() {
+        errorAlert.style.display = 'none';
+        errorMessage.textContent = '';
+      }
+
+      // Convert Markdown formatting to clean HTML
+      function formatMarkdown(text) {
+        if (!text) return '<p class="text-muted">No details provided for this section.</p>';
+
+        let html = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        // Highlight currency amounts ($184.50, etc.)
+        html = html.replace(/(\$\d+(?:\.\d{2})?)/g, '<span class="highlight-amount">$1</span>');
+
+        // Highlight dates (e.g. November 3)
+        html = html.replace(/(November\s+\d{1,2}|Nov\.\s*\d{1,2})/gi, '<span class="highlight-date">$1</span>');
+
+        // Highlight Amoxicillin
+        html = html.replace(/(Amoxicillin(?:\s+\d+mg)?)/gi, '<span class="highlight-med">$1</span>');
+
+        // Bold (**text**)
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // Italic (*text*)
+        html = html.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
+
+        // Convert bullet points into unordered lists
+        const lines = html.split('\n');
+        let inList = false;
+        let formattedLines = [];
+
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (/^[-*•]\s+/.test(trimmed)) {
+            if (!inList) {
+              formattedLines.push('<ul>');
+              inList = true;
+            }
+            formattedLines.push(`<li>${trimmed.replace(/^[-*•]\s+/, '')}</li>`);
+          } else if (/^\d+\.\s+/.test(trimmed)) {
+            if (!inList) {
+              formattedLines.push('<ol>');
+              inList = true;
+            }
+            formattedLines.push(`<li>${trimmed.replace(/^\d+\.\s+/, '')}</li>`);
+          } else {
+            if (inList) {
+              formattedLines.push(inList === 'ol' ? '</ol>' : '</ul>');
+              inList = false;
+            }
+            if (trimmed.length > 0) {
+              formattedLines.push(`<p>${trimmed}</p>`);
+            }
+          }
+        }
+
+        if (inList) {
+          formattedLines.push('</ul>');
+        }
+
+        return formattedLines.join('\n');
+      }
+
+      // Submit Form
+      btnSubmit.addEventListener('click', handleExplain);
+
+      // Keyboard Shortcut: Ctrl/Cmd + Enter
+      docInput.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          handleExplain();
+        }
+      });
+
+      async function handleExplain() {
+        const text = docInput.value.trim();
+        if (!text && !attachedImage) {
+          showError('Please paste document text or attach a photo before asking ClearDoc to explain it.');
+          docInput.focus();
+          return;
+        }
+
+        hideError();
+        const selectedLanguage = languageSelect.value;
+        const isRtl = selectedLanguage === 'Arabic';
+
+        // UI Loading State
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<span>⏳</span><span>Gemma 4 is reading...</span>';
+        outputArea.style.display = 'block';
+        loadingState.style.display = 'block';
+        resultsDisplay.style.display = 'none';
+        appLayout.classList.add('has-results');
+
+        // Animated subtext messages
+        const messages = attachedImage
+          ? [
+              'Inspecting your photo and detecting printed text & numbers...',
+              'Gemma 4 is reading the diagnosis, charges, and instructions...',
+              'Translating medical and billing jargon into everyday steps...',
+              'Highlighting exact amounts, deadlines, and dosages...'
+            ]
+          : [
+              'Reading your document and extracting key points...',
+              'Translating medical and billing jargon into everyday terms...',
+              'Highlighting exact amounts, deadlines, and dosages...',
+              'Drafting 2-3 helpful questions you can ask the sender...'
+            ];
+        let msgIndex = 0;
+        const loadingSubtext = document.getElementById('loading-subtext');
+        const interval = setInterval(() => {
+          msgIndex = (msgIndex + 1) % messages.length;
+          loadingSubtext.textContent = messages[msgIndex];
+        }, 2200);
+
+        try {
+          const payload = {
+            language: selectedLanguage,
+          };
+          if (text) {
+            payload.text = text;
+          }
+          if (attachedImage) {
+            payload.image = {
+              data: attachedImage.data,
+              mimeType: attachedImage.mimeType,
+            };
+          }
+
+          const res = await fetch('/api/explain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+
+          clearInterval(interval);
+          const data = await res.json();
+
+          if (!res.ok || !data.success) {
+            throw new Error(data.error || 'Unable to explain the document. Please try again.');
+          }
+
+          // Populate Results
+          currentExplanationRaw = data.output || '';
+          targetLangBadge.textContent = selectedLanguage;
+
+          const sections = data.sections || {};
+          secWhatItSays.innerHTML = formatMarkdown(sections.whatItSays || data.output);
+          secWhatYouNeedToDo.innerHTML = formatMarkdown(sections.whatYouNeedToDo || 'Please follow any instructions stated in the document.');
+          secDeadlines.innerHTML = formatMarkdown(sections.deadlinesAmountsDosages || 'No deadlines or amounts specified.');
+          secWarnings.innerHTML = formatMarkdown(sections.whatToWatchOutFor || 'No specific warnings noted.');
+          secQuestions.innerHTML = formatMarkdown(sections.questionsToAsk || 'Contact the clinic or billing office if you have questions.');
+
+          // RTL toggle
+          if (isRtl) {
+            resultsDisplay.classList.add('rtl');
+          } else {
+            resultsDisplay.classList.remove('rtl');
+          }
+
+          // Show Results
+          loadingState.style.display = 'none';
+          resultsDisplay.style.display = 'flex';
+          resultsDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        } catch (err) {
+          clearInterval(interval);
+          loadingState.style.display = 'none';
+          showError(err.message);
+        } finally {
+          btnSubmit.disabled = false;
+          updateSubmitButtonLabel();
+        }
+      }
+
+      // Copy Explanation
+      btnCopy.addEventListener('click', async () => {
+        if (!currentExplanationRaw) return;
+        try {
+          await navigator.clipboard.writeText(currentExplanationRaw);
+          const orig = btnCopy.innerHTML;
+          btnCopy.innerHTML = '<span>✅</span><span>Copied!</span>';
+          setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
+        } catch {
+          alert('Failed to copy to clipboard.');
+        }
+      });
+
+      // Print / PDF
+      btnPrint.addEventListener('click', () => {
+        window.print();
+      });
+
+      // Text-to-Speech (Read Aloud)
+      btnReadAloud.addEventListener('click', () => {
+        if (!('speechSynthesis' in window)) {
+          alert('Text-to-speech is not supported in this browser.');
+          return;
+        }
+
+        if (isReading) {
+          window.speechSynthesis.cancel();
+          isReading = false;
+          btnReadAloud.innerHTML = '🔊 Read Aloud';
+          return;
+        }
+
+        const textToRead = resultsDisplay.innerText;
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        
+        // Language matching
+        const langMap = {
+          'English': 'en-US',
+          'Hausa': 'ha',
+          'French': 'fr-FR',
+          'Spanish': 'es-ES',
+          'Arabic': 'ar-SA',
+          'Portuguese': 'pt-BR',
+          'Swahili': 'sw',
+          'Hindi': 'hi-IN'
+        };
+        const langCode = langMap[languageSelect.value] || 'en-US';
+        utterance.lang = langCode;
+        utterance.rate = 0.95;
+
+        utterance.onend = () => {
+          isReading = false;
+          btnReadAloud.innerHTML = '🔊 Read Aloud';
+        };
+
+        utterance.onerror = () => {
+          isReading = false;
+          btnReadAloud.innerHTML = '🔊 Read Aloud';
+        };
+
+        window.speechSynthesis.speak(utterance);
+        isReading = true;
+        btnReadAloud.innerHTML = '⏹️ Stop Reading';
+      });
+    </script>
+  </body>
+</html>

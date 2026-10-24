@@ -1,0 +1,6 @@
+{
+  "name": "ClearDoc",
+  "description": "Explains confusing letters, bills, prescriptions, and document photos in plain words across 8 languages using Gemma 4.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,40 @@
+ST. JUDE COMMUNITY HEALTH CLINIC
+DEPARTMENT OF AMBULATORY MEDICINE & PATIENT FINANCIAL SERVICES
+1044 Mercer Street, Suite 300, Chicago, IL 60611 | Phone: (555) 019-4820
+
+PATIENT DISCHARGE SUMMARY & FORMAL STATEMENT OF ACCOUNT
+
+Date of Service: October 22, 2026
+Statement Date: October 24, 2026
+Account Reference: ACC-94820-MED
+Patient Name: Jane M. Doe
+Attending Physician: Dr. Marcus Vance, MD (NPI: 1982347102)
+
+1. CLINICAL DIAGNOSIS & IMPRESSION:
+Patient presented with a 10-day history of unilateral maxillary sinus pressure, purulent rhinorrhea, low-grade pyrexia, and associated cephalalgia. Diagnostic evaluation indicates acute bacterial rhinosinusitis with secondary Eustachian tube dysfunction (ICD-10: J01.00).
+
+2. DISCHARGE PRESCRIPTION & MEDICATION ORDERS:
+- Rx: Amoxicillin 500mg oral capsules.
+  Dispense: 30 capsules (no refills).
+  Directions (Sig): Ingest 1 capsule orally every 8 hours with meals and plenty of water for 10 consecutive days.
+  Adherence Note: Complete the entirety of the antibacterial regimen even if symptomatic improvement occurs prior to day 10.
+- Auxiliary: OTC Saline nasal spray 2 sprays per nostril BID as needed. Rest and warm steam inhalation.
+
+3. FINANCIAL CHARGES & PATIENT RESPONSIBILITY:
+- Code 99214 Level 4 Outpatient Clinic Evaluation: $265.00
+- Code 87081 Point-of-Care Bacterial Screen: $42.00
+- Outpatient Diagnostic Facility Surcharge: $55.00
+- Total Gross Billed Charges: $362.00
+- Primary Payer Contracted Adjustment: -$122.50
+- Primary Insurance Remittance Payment: -$55.00
+- Net Co-Insurance / Outstanding Patient Balance: $184.50
+
+4. PAYMENT DEADLINE & TERMS:
+The outstanding patient balance of $184.50 is payable in full no later than November 3.
+Payments received after November 3 are subject to a late charge of 5% per billing cycle and administrative collection escalation.
+
+5. WARNING SIGNS & ADVERSE REACTION PROTOCOL:
+Discontinue medication and seek emergency medical care immediately if you experience signs of severe anaphylaxis (urticaria/rash, dyspnea, swelling of the lips, tongue, or pharynx). Contact clinic immediately if fever exceeds 102.5°F.
+
+For billing disputes, installment plans, or insurance questions, contact Patient Accounts at (555) 019-4822.
+For prescription questions, contact the Pharmacy Helpdesk at (555) 019-4825.
